@@ -1,0 +1,34 @@
+import discord
+from discord.ext import commands
+
+# Ganti '!' dengan prefix yang kamu inginkan
+bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+
+# Dictionary berisi trigger dan respon
+auto_responses = {
+    "halo": "halo juga 👋",
+    "siapa kamu": "Aku bot auto respond buatan kamu 😎",
+    "kamu ngapain": "Lagi ngawasin server ini dong!",
+    "ping": "Pong! 🏓"
+}
+
+@bot.event
+async def on_ready():
+    print(f'✅ Bot siap digunakan sebagai {bot.user}')
+
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+
+    msg = message.content.lower()
+    
+    for trigger, response in auto_responses.items():
+        if trigger in msg:
+            await message.channel.send(response)
+            break  # Agar tidak spam banyak respon sekaligus
+
+    await bot.process_commands(message)
+
+# Ganti dengan token bot kamu
+bot.run('YOUR_BOT_TOKEN')
